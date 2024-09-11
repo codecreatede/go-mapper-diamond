@@ -7,8 +7,8 @@ Universitat Potsdam
 Date 2024-9-11
 
 
-finding the denovo alignment of the pacbiohifi reads against a protein database and holding those
-alignment and the corresponding alignments in struct and extracting the matched regions. This import (
+doing the denovo alignment of the pacbiohifi reads against a protein database and holding those
+alignment and the corresponding alignments in struct and extracting the matched regions. This is for
 when you have a relatively less coverage and you want to search for the tags and the corresponding
 protein alignments to generate annotation hints.
 
@@ -30,7 +30,7 @@ import (
 func main() {
 
    readPacBio := flag.String("pacbiohifi", "path to the fastq file", "file")
-	 readFasta := flag.String("proteinfasta", "path to the genome fasta". "file")
+	 readFasta := flag.String("proteinfasta", "path to the genome fasta", "file")
 
 	 flag.Parse()
 
