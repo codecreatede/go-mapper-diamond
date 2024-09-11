@@ -30,7 +30,7 @@ import (
 func main() {
 
    readPacBio := flag.String("pacbiohifi", "path to the fastq file", "file")
-	 readFasta := flag.String("proteinfasta", "path to the genome fasta". "fasta")
+	 readFasta := flag.String("proteinfasta", "path to the genome fasta". "file")
 
 	 flag.Parse()
 
