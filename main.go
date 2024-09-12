@@ -174,7 +174,7 @@ func main() {
 					hspSeq := []alignedFetch{}
 					hspSeq = append(hspSeq, alignedFetch{
 						seqID : seqIDwrite[i]
-						seqSeq : SeqSeqWrite[i][int(holdAlignment.start[i]):int(holdAlignment.end[i])]
+						seqSeq : SeqSeqWrite[i][int(holdAlignment[i].start):int(holdAlignment[i].end)]
 					})
 				}
 			}
@@ -185,7 +185,7 @@ func main() {
 				}
 				defer writeHsp.Close()
 				for i:= range hspSeq {
-					write, err := writeHsp.write(>hspSeq.seqID[i]\nhspseqSeq[i]\n)
+					write, err := writeHsp.write(>hspSeq[i].seqID\nhspseqSeq[i]\n)
 				}
 }
 
