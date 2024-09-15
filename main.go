@@ -48,19 +48,18 @@ func main() {
 		log.Fatal (err)
 	}
 
-	pacbioRead, err := bufio.NewScanner(pacbioOpen)
-	if err != nil {
-		log.Fatal(err)
-	}
+	pacbioRead := bufio.NewScanner(pacbioOpen)
+
+  seqID = []mapperID{}
+  seqSeq = []mapperSeq{}
+
   for pacbioRead.Scan() {
 		line := pacBioRead.Text()
 		if strings.HasPrefix(string(line), "@") {
-			seqID = []mapperID{}
 			seqID = append(seqID, mapperID{
         id : string.Split(string(line), "\t")[0]
 			})
 		if strings.HasPrefix(string(line), "A") || strings.HasPrefix(string(line), "T") || strings.HasPrefix(string(line), "C") || strings.HasPrefix(string(line), "C")
-			seqSeq = []mapperSeq{}
 			seqSeq = append(seqSeq, mapperSeq{
 				seq : string(line)
 			})
@@ -120,9 +119,9 @@ func main() {
 				log.Fatal(err)
 			}
 	alignmentRead, err := bufio.NewScanner(alignmentOpen)
+	holdAlignment := []hspStruct{}
 	for alignmentRead.Scan() {
 				line := alignmentRead.Text()
-				holdAlignment := []hspStruct{}
 				holdAlignment := append(holadalignment, hspStruct{
 					refseq : strings.Split(line, "\t")[0]
 					aligned : strings.Split(line, "\t")[1]
@@ -151,15 +150,15 @@ func main() {
 				log.Fatal(err)
 			}
 		writeFastRead := bufio.Newscanner(writeFastaOpen)
+		seqIDWrite := []nucleotideIDStruct{}
+		seqSeqWrite := []nucleotideSeqstruct{}
 			for writeFastaRead.Scan() {
 				line := writeFastaRead.Text()
 				if strings.HasPrefix(string(line), ">") {
-					seqIDWrite := []nucleotideIDStruct{}
 					seqIDWrite = append(seqIDWrite, nucleotideIDstruct{
 						id : line
 					})
 				if strings.HasPrefix(string(line), "A") || strings.HasPrefix(string(line), "T") || strings.HasPrefix(string(line), "G") || strings.HasPrefix(string(line), "C") {
-						seqSeqWrite := []nucleotideSeqstruct{}
 						seqSeqWrite = append(seqSeqWrite, nucleotiSeqStruct{
 							seq : line
 						})
@@ -168,10 +167,10 @@ func main() {
 
  // extracting the hsp sequences
 
+    hspSeq := []alignedFetch{}
 	for i := range holdAlignment {
 					for j := range seqIDWrite {
 				if seqIDwrite[i] == holdAlignment.refseq[i] {
-					hspSeq := []alignedFetch{}
 					hspSeq = append(hspSeq, alignedFetch{
 						seqID : seqIDwrite[i]
 						seqSeq : SeqSeqWrite[i][int(holdAlignment[i].start):int(holdAlignment[i].end)]
