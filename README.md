@@ -6,7 +6,6 @@
 - extracting the regions of the assembled genome for the synteny plots.
 
 To do:
-- Hints virualization using the go routines and bug check
-- adding channels for making it scalable to the BLAS. 
+- Hints virualization using the go routines and bug check - waiting for the gg package reply.
 
 Gaurav Sablok
