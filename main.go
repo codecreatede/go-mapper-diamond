@@ -57,7 +57,7 @@ func main() {
 		line := pacBioRead.Text()
 		if strings.HasPrefix(string(line), "@") {
 			seqID = append(seqID, mapperID{
-        id : string.Split(string(line), "\t")[0]
+        id : string.Split(string(line), "\t")[0],
 			})
 		if strings.HasPrefix(string(line), "A") || strings.HasPrefix(string(line), "T") || strings.HasPrefix(string(line), "C") || strings.HasPrefix(string(line), "C")
 			seqSeq = append(seqSeq, mapperSeq{
