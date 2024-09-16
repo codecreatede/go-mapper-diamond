@@ -17,7 +17,7 @@ protein alignments to generate annotation hints.
 
 import (
 	"fmt"
-	"flags"
+	"flag"
 	"os"
 	"os/exec"
 	"log"
@@ -29,8 +29,8 @@ import (
 
 func main() {
 
-   readPacBio := flag.String("pacbiohifi", "path to the fastq file", "file")
-	 readFasta := flag.String("proteinfasta", "path to the genome fasta", "file")
+    readPacBio := flag.String("pacbiohifi", "path to the fastq file", "file")
+	readFasta := flag.String("proteinfasta", "path to the genome fasta", "file")
 
 	 flag.Parse()
 
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// pacbio opening and converting into structs
-	pacbioOpen, err := os.Open(readPacbio)
+	pacbioOpen, err := os.Open(*readPacbio)
 	if err != nil {
 		log.Fatal (err)
 	}
