@@ -22,19 +22,52 @@ import (
 	"os/exec"
 	"log"
 	"strings"
+	"github.com/spf13/cobra"
 )
 
+func main () {
+	if err := rootCmd.Execute(); err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
+var pacbio string
+var protein string
+var alignment string
+
+var rootCmd = &cobra.Command {
+	Use: "flag",
+	Long: "This is golang application for generating the hints from the protein alignment to pacbiohifi reads",
+}
+
+var alignCmd = &cobra.Command {
+	Use: "align",
+	Long: "aligns the reads to the protein database and then generates the hints",
+	Run: alignFunc,
+
+}
+
+var analyzeCmd = &cobra.Command {
+	Use: "analyze",
+	Long: "analyze the already aligned reads to protein alignment",
+	Run: analyzeFunc,
+}
 
 
+func init() {
 
-func main() {
+	alignCmd.Flags().StringVarP(&pacbio, "pacbio", "p", "reads for protein alignment", "read-protein alignment")
+	alignCmd.Flags().StringVarP(&protein, "protein", "P", "protein datasets", "protein datasets for the alignment")
+	analyzeCmd.Flags().StringVarP(&alignment, "alignment", "a", "analyze the already given alignment", "post alignment analyzer")
 
-    readPacBio := flag.String("pacbiohifi", "path to the fastq file", "file")
-	readFasta := flag.String("proteinfasta", "path to the genome fasta", "file")
+  rootCmd.AddCommand(alignCmd)
+  rootCmd.AddCommand(analyzeCmd)
 
-	 flag.Parse()
+}
 
-	// pacbio Structs
+
+func alignCmd (cmd *cobra.Command, args [] string){
+
 	type mapperID struct {
 		id string
 	}
@@ -42,8 +75,7 @@ func main() {
 		seq string
 	}
 
-	// pacbio opening and converting into structs
-	pacbioOpen, err := os.Open(*readPacbio)
+	pacbioOpen, err := os.Open(pacbio)
 	if err != nil {
 		log.Fatal (err)
 	}
@@ -65,9 +97,7 @@ func main() {
 			})
 			combinedSeqID = []{seqID, seqSeq}
 		}
-
-	 // pacbio fasta writing
-			writeFasta, err := os.Create("writeFasta", os.O_CREATE|os.O_WRONLY, 0644)
+			writeFasta, err := os.Create("pacbio.fasta", os.O_CREATE|os.O_WRONLY, 0644)
 		  if err ! = nil {
 			log.Fatal(err)
 		 }
@@ -80,31 +110,18 @@ func main() {
 				}
 			}
 
-    // running the diamond mapper
-		cmd := exec.Command("diamond", "makedb", "--in", "*readFasta", "-d", "reference")
-	  err := cmd.Run()
-		if err != nil {
-					log.Fatal("blast database not formatted %s\n",err)
-				}
-	  out, err := exec.Command("diamond", "makedb", "-in", "*readFasta", "-d", "reference").Output()
+	  out, err := exec.Command("diamond", "makedb", "-in", "pacbio.fasta", "-d", "reference").Output()
 		if err != nil {
 					log.Fatal("command failed with %s\n", err)
 				}
 		fmt.Println(out)
 
-		cmd := exec.Command("diamond", "blastx", "-d", "reference", "-q", "*readFasta", "-o", "aligned.tsv")
-		err := cmd.Run()
-		if err != nil {
-					log.Fatal("blastx didnt ran successfully %s\n", err)
-				}
 		out, err := exec.Command("diamond", "blastx", "-d", "reference", "-q", "*readsFasta", "-o", "aligned.tsv").Output()
 	  if err != nil {
 					log.Fatal("command failed with the error %s\n", err)
 				}
 		fmt.Println(out)
 		 }
-
-	// extracting the hsp struct for the sequence extraction
 
 	type hspStruct struct {
        refseq string
@@ -132,45 +149,23 @@ func main() {
 				})
 			}
 
-
-    type nucleotideIDStruct struct {
+  type nucleotideIDStruct struct {
 				id string
 			}
 
-		type nucleotideSeqstruct struct {
+	type nucleotideSeqstruct struct {
 				seq string
 			}
 
-		type alignedFetch struct {
+	type alignedFetch struct {
 				seqID string
 				seqSeq string
 			}
-    writeFastaOpen , err := os.Open("writeFasta")
-			if err != nil {
-				log.Fatal(err)
-			}
-		writeFastRead := bufio.Newscanner(writeFastaOpen)
-		seqIDWrite := []nucleotideIDStruct{}
-		seqSeqWrite := []nucleotideSeqstruct{}
-			for writeFastaRead.Scan() {
-				line := writeFastaRead.Text()
-				if strings.HasPrefix(string(line), ">") {
-					seqIDWrite = append(seqIDWrite, nucleotideIDstruct{
-						id : line
-					})
-				if strings.HasPrefix(string(line), "A") || strings.HasPrefix(string(line), "T") || strings.HasPrefix(string(line), "G") || strings.HasPrefix(string(line), "C") {
-						seqSeqWrite = append(seqSeqWrite, nucleotiSeqStruct{
-							seq : line
-						})
-					}
-				}
 
- // extracting the hsp sequences
-
-    hspSeq := []alignedFetch{}
+  hspSeq := []alignedFetch{}
 	for i := range holdAlignment {
-					for j := range seqIDWrite {
-				if seqIDwrite[i] == holdAlignment.refseq[i] {
+		for j := range seqIDWrite {
+			if seqIDwrite[i] == holdAlignment[i].refseq {
 					hspSeq = append(hspSeq, alignedFetch{
 						seqID : seqIDwrite[i]
 						seqSeq : SeqSeqWrite[i][int(holdAlignment[i].start):int(holdAlignment[i].end)]
@@ -178,11 +173,12 @@ func main() {
 				}
 			}
 				}
+
 	writeHsp, err := os.Create("writeHSP", os.O_CREATE|os.O_WRONLY, 0644)
 				if err != nil {
 					log.Fatal(err)
 				}
-				defer writeHsp.Close()
+	defer writeHsp.Close()
 				for i:= range hspSeq {
 					write, err := writeHsp.write(>hspSeq[i].seqID\nhspseqSeq[i]\n)
 				}
