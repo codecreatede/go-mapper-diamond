@@ -105,7 +105,7 @@ go run main.go alignment -a matches.tsv -p ./samplefiles/pacbioreads.fasta
 go run main.go analyze  -a ./samplefiles/matches.tsv -P ./samplefiles/fastafile.fasta
 ```
 
-- in case of the binar use the following should be done 
+- in case of the binary use the following should be done 
 ```
 ./gomapperdiamod -h
 ./gomapperdiamond seqHsp -a ./samplefiles/matches.tsv -p ./samplefiles/fastafile.fasta
