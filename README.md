@@ -6,7 +6,8 @@
 - for hint generation and tag generation for AUGUSTUS and BRAKER and the sequence extraction for generating the environmental tags for the sequencing. 
 
 ```
-gauavsablok@gauravsablok ~/Desktop/codecreatede/golang/gomapper-diamond ±main⚡ » go run main.go -h
+gauavsablok@gauravsablok ~/Desktop/codecreatede/golang/gomapper-diamond ±main⚡ » \
+go run main.go -h
 This is golang application for generating the hints from the protein alignment to pacbiohifi reads
 
 Usage:
@@ -94,6 +95,23 @@ Flags:
   -h, --help                             help for upStreamHSP
   -p, --referencefasta string            pacbio file (default "pacbio reads file")
   -u, --upstream of the hsp tags int     upstream tags (default 4)
+```
+
+- the usage of the corresponding each section is given below: 
+```
+go run main.go seqHsp -a ./samplefiles/matches.tsv -p ./samplefiles/fastafile.fasta 
+go run main.go upStreamHSP -a ./samplefiles/matches.tsv -p ./samplefiles/fastafile.fasta -u 10 -d 10
+go run main.go alignment -a matches.tsv -p ./samplefiles/pacbioreads.fasta
+go run main.go analyze  -a ./samplefiles/matches.tsv -P ./samplefiles/fastafile.fasta
+```
+
+- in case of the binar use the following should be done 
+```
+./gomapperdiamod -h
+./gomapperdiamond seqHsp -a ./samplefiles/matches.tsv -p ./samplefiles/fastafile.fasta
+./gomappeddiamond upStreamHSP -a ./samplefiles/matches.tsv -p ./samplefiles/fastafile.fasta -u 10 -d 10
+./gomapperdiamond alignment -a matches.tsv -p ./samplefiles/pacbioreads.fasta
+./gomapperdiamond analyze  -a ./samplefiles/matches.tsv -P ./samplefiles/fastafile.fasta
 ```
 
 Gaurav Sablok

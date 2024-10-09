@@ -83,7 +83,7 @@ var upstreamCmd = &cobra.Command{
 }
 
 var analyzeCmd = &cobra.Command{
-	Use:  "align and analyze",
+	Use:  "analyze",
 	Long: "this option aligns and analyze all together and it requires only the proteins and the reference pacbio or the other fasta file",
 	Run:  alignAnalyzeFunc,
 }
@@ -112,11 +112,13 @@ func init() {
 	upstreamCmd.Flags().
 		IntVarP(&downstreamEnd, "downstream of the hsp tags", "d", 5, "downstream tags")
 	analyzeCmd.Flags().
-		StringVarP(&pacbiofolder, "pacbiofolder", "f", "folder containing the bam files and the pbi files", "pacbio conversion")
+		StringVarP(&alignmentfile, "alignmentfile", "a", "alignment file to be analyzed", "alignment")
 	analyzeCmd.Flags().
-		StringVarP(&pacbiofile, "pacbio", "p", "reads for protein alignment", "read-protein alignment")
+		StringVarP(&referencefasta, "referencefasta", "P", "reference fasta file used for he alignment", "reference alignment")
 	analyzeCmd.Flags().
-		StringVarP(&proteinfasta, "protein", "P", "protein datasets", "protein datasets for the alignment")
+		IntVarP(&upstreamStart, "upstream of the hsp tags", "u", 4, "upstream tags")
+	analyzeCmd.Flags().
+		IntVarP(&downstreamEnd, "downstream of the hsp tags", "d", 5, "downstream tags")
 
 	rootCmd.AddCommand(seqCmd)
 	rootCmd.AddCommand(upstreamCmd)
